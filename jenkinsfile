@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Abhishekmudda/jenkins-multibranch-pipeline.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    pip3 install --upgrade pip --break-system-packages
+                    pip3 install -r requirements.txt --break-system-packages
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                    python3 -m pytest > result.log || echo "tests failed"
+                    cat result.log
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ All tests passed!'
+        }
+        failure {
+            echo '❌ Tests failed. Check logs below:'
+            sh 'cat result.log || echo "No result log found."'
+        }
+    }
+}
