@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Abhishekmudda/jenkins-multibranch-pipeline.git'
+                git branch: 'extend_functionality', url: 'https://github.com/Abhishekmudda/jenkins-multibranch-pipeline.git'
             }
         }
 
@@ -20,8 +20,8 @@ pipeline {
         stage('Run Tests') {
             steps {
                 sh '''
-                    python3 -m pytest > result.log || echo "tests failed"
-                    cat result.log
+                    python3 -m pytest > extended_result.log || echo "extended tests failed"
+                    cat extended_result.log
                 '''
             }
         }
